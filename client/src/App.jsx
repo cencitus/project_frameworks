@@ -1,35 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react'
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
+import { getToken, logout } from './auth'
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App(){
+  const navigate = useNavigate()
+  const location = useLocation()
+  const token = getToken()
+
+  React.useEffect(() => {
+    if (!token && location.pathname !== '/login') navigate('/login')
+  }, [token, location.pathname, navigate])
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div style={{fontFamily:'system-ui, Segoe UI, Roboto, Arial', maxWidth: 960, margin:'20px auto', padding:'0 12px'}}>
+      <header style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16}}>
+        <nav style={{display:'flex', gap:12}}>
+          <Link to="/">Дефекты</Link>
+        </nav>
+        <div>
+          {token
+            ? <button onClick={() => { logout(); navigate('/login') }}>Выйти</button>
+            : <Link to="/login">Войти</Link>}
+        </div>
+      </header>
+      <Outlet />
+    </div>
   )
 }
-
-export default App
