@@ -32,7 +32,6 @@ export default function Login(){
         {error && <div style={{color:'crimson'}}>{String(error)}</div>}
         <button disabled={loading}>{loading ? 'Входим…' : 'Войти'}</button>
       </form>
-      <p style={{marginTop:8, color:'#666'}}>Если пользователя нет — создай его через Postman.</p>
     </div>
   )
 }
